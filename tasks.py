@@ -19,7 +19,7 @@ table = Tables()
 
 @task
 def validate_nit():
-    """Consult the RUT status on the DIAN website for a list of NITs provided in a CSV file
+    """Consult the RUT status on the DIAN website for a list of NIT provided in a CSV file
     and save the results in a new CSV file."""
     # Set the browser wait time
     browser.configure(slowmo=200,)
