@@ -1,0 +1,34 @@
+@startuml
+actor Usuario
+participant "Script de Validación" as Script
+participant "Archivo nid_validar.csv" as ValidarCSV
+participant "Archivo nid_validados.csv" as ValidadosCSV
+participant "Tabla nit_validar_result" as ValidarResult
+participant "Página Web DIAN" as DIAN
+
+Usuario -> Script: Ejecuta el script
+Script -> ValidarCSV: Leer registros
+Script -> ValidadosCSV: Leer registros
+Script -> ValidarResult: Crear tabla
+
+Script -> Script: Crear conjunto de NIT validados
+loop para cada NIT en nid_validar.csv
+    Script -> Script: Verificar si NIT está en conjunto de validados
+    alt NIT está en conjunto
+        Script -> ValidadosCSV: Buscar NIT
+        Script -> ValidarResult: Agregar registro correspondiente
+    else NIT no está en conjunto
+        Script -> DIAN: Consultar NIT en página web
+        DIAN -> Script: Devolver resultados
+        Script -> ValidarResult: Agregar resultados
+        alt Resultados válidos
+            Script -> ValidadosCSV: Agregar resultados
+        end
+    end
+end
+
+Script -> ValidarResult: Guardar nit_validar_result.csv
+Script -> ValidadosCSV: Guardar nit_validados.csv
+@enduml
+
+    
